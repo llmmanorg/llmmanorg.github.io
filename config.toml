@@ -1,0 +1,58 @@
+base_url = "https://llmmanorg.github.io"
+title = "llmman"
+description = "Manage and serve LLM models as standard OCI artifacts. Ollama-, OpenAI-, and Anthropic-compatible APIs from one small binary."
+
+default_language = "en"
+compile_sass = false
+build_search_index = false
+minify_html = true
+
+generate_feeds = true
+feed_filenames = ["atom.xml"]
+
+taxonomies = [
+    { name = "tags", feed = true },
+]
+
+[markdown]
+smart_punctuation = true
+render_emoji = false
+
+[markdown.highlighting]
+style = "inline"
+theme = "one-dark-pro"
+
+[extra]
+# Edit copy here rather than in the templates.
+tagline = "Models are just OCI artifacts."
+subtitle = "llmman packages LLM models as standard OCI images, stores them in any registry you already run, and serves them over Ollama-, OpenAI- and Anthropic-compatible APIs."
+
+repo_url = "https://github.com/llmmanorg/llmman"
+repo_name = "llmmanorg/llmman"
+
+install_sh = "curl -fsSL https://raw.githubusercontent.com/llmmanorg/llmman/main/install.sh | sh"
+install_ps = "irm https://raw.githubusercontent.com/llmmanorg/llmman/main/install.ps1 | iex"
+
+[[extra.features]]
+title = "Any OCI registry"
+body = "Docker Hub, GHCR, quay, or something self-hosted. The local store is a plain OCI Image Layout, so `docker` and `podman` can read it too."
+
+[[extra.features]]
+title = "Three APIs, one server"
+body = "`llmman serve` answers Ollama, OpenAI (including `/v1/responses`) and Anthropic routes on the same port, so existing clients need no patching."
+
+[[extra.features]]
+title = "Bring your own engine"
+body = "GGUF models are served by `llama-server`, safetensors by `vllm`, or by `mlx_lm.server` on Apple Silicon. llmman fetches a matching build if you have none."
+
+[[extra.features]]
+title = "Launch integrations"
+body = "`llmman launch claude --model gemma4` starts the daemon, preloads the model, wires up the environment and execs the tool."
+
+[[extra.features]]
+title = "Registry-to-registry transfer"
+body = "`llmman transfer` streams an image straight from HuggingFace to a registry without ever landing the weights on your disk."
+
+[[extra.features]]
+title = "Hosted models too"
+body = "`--provider openrouter` points the same integrations at a model llmman does not serve itself, with the provider list resolved from models.dev at runtime."
