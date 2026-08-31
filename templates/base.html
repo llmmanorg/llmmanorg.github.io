@@ -15,7 +15,8 @@
 <meta name="twitter:card" content="summary">
 
 <link rel="alternate" type="application/atom+xml" title="{{ config.title }} blog" href="{{ get_url(path='blog/atom.xml', trailing_slash=false) }}">
-<link rel="icon" href="{{ get_url(path='favicon.svg', trailing_slash=false) }}" type="image/svg+xml">
+<link rel="icon" href="{{ get_url(path='favicon.png', trailing_slash=false) }}" type="image/png">
+<link rel="apple-touch-icon" href="{{ get_url(path='apple-touch-icon.png', trailing_slash=false) }}">
 <link rel="stylesheet" href="{{ get_url(path='style.css', trailing_slash=false) }}">
 </head>
 <body>
@@ -29,7 +30,6 @@
     </a>
     <nav class="site-nav">
       <a href="{{ get_url(path='@/blog/_index.md') }}">Blog</a>
-      <a href="{{ config.extra.repo_url }}#install">Install</a>
       <a class="nav-repo" href="{{ config.extra.repo_url }}">GitHub</a>
     </nav>
   </div>

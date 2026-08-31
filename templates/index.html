@@ -2,44 +2,18 @@
 
 {% block content %}
 <section class="hero">
-  <div class="wrap">
-    <h1>{{ config.extra.tagline }}</h1>
-    <p class="lede">{{ config.extra.subtitle }}</p>
-
-    <div class="install">
-      <div class="install-block">
-        <span class="install-label">Linux · macOS</span>
-        <pre class="cmd"><code>{{ config.extra.install_sh }}</code></pre>
-      </div>
-      <div class="install-block">
-        <span class="install-label">Windows (PowerShell)</span>
-        <pre class="cmd"><code>{{ config.extra.install_ps }}</code></pre>
-      </div>
-    </div>
-
-    <p class="hero-links">
-      <a class="btn" href="{{ config.extra.repo_url }}">Read the docs</a>
-      <a class="btn btn-quiet" href="{{ get_url(path='@/blog/_index.md') }}">Blog</a>
-    </p>
-  </div>
-</section>
-
-<section class="wrap section">
-  <h2 class="section-title">Try it</h2>
-  <div class="steps">
-    <div class="step">
-      <h3>Pull a model</h3>
-      <pre class="cmd"><code>llmman pull gemma4</code></pre>
-    </div>
-    <div class="step">
-      <h3>Serve it</h3>
-      <pre class="cmd"><code>llmman serve</code></pre>
-      <p class="step-note">Listens on <code>127.0.0.1:17434</code>. Models load on demand and unload when idle.</p>
-    </div>
-    <div class="step">
-      <h3>Point a client at it</h3>
-      <pre class="cmd"><code>OLLAMA_HOST=127.0.0.1:17434 ollama run gemma4</code></pre>
-      <p class="step-note">Or use any OpenAI- or Anthropic-compatible client.</p>
+  <div class="wrap hero-inner">
+    <img class="hero-mark"
+         src="{{ get_url(path='llmman-mark.png', trailing_slash=false) }}"
+         alt="llmman logo: a manatee"
+         width="294" height="213">
+    <div class="hero-copy">
+      <h1>{{ config.extra.tagline }}</h1>
+      <p class="lede">{{ config.extra.subtitle }}</p>
+      <p class="hero-links">
+        <a class="btn" href="{{ config.extra.repo_url }}">Read the docs</a>
+        <a class="btn btn-quiet" href="{{ get_url(path='@/blog/_index.md') }}">Blog</a>
+      </p>
     </div>
   </div>
 </section>

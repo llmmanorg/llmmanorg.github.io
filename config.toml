@@ -25,13 +25,10 @@ theme = "one-dark-pro"
 [extra]
 # Edit copy here rather than in the templates.
 tagline = "Models are just OCI artifacts."
-subtitle = "llmman packages LLM models as standard OCI images, stores them in any registry you already run, and serves them over Ollama-, OpenAI- and Anthropic-compatible APIs."
+subtitle = "llmman packages LLM models as standard OCI images, stores them in any OCI registry you already run, and serves them over Ollama-, OpenAI- and Anthropic-compatible APIs."
 
 repo_url = "https://github.com/llmmanorg/llmman"
 repo_name = "llmmanorg/llmman"
-
-install_sh = "curl -fsSL https://raw.githubusercontent.com/llmmanorg/llmman/main/install.sh | sh"
-install_ps = "irm https://raw.githubusercontent.com/llmmanorg/llmman/main/install.ps1 | iex"
 
 [[extra.features]]
 title = "Any OCI registry"
@@ -51,7 +48,7 @@ body = "`llmman launch claude --model gemma4` starts the daemon, preloads the mo
 
 [[extra.features]]
 title = "Registry-to-registry transfer"
-body = "`llmman transfer` streams an image straight from HuggingFace to a registry without ever landing the weights on your disk."
+body = "`llmman transfer` streams an image straight from HuggingFace to an OCI registry without ever landing the weights on your disk."
 
 [[extra.features]]
 title = "Hosted models too"

@@ -10,11 +10,11 @@ tags = ["announcement", "oci", "inference"]
 Model weights are large binary blobs with a name, a version, and a
 dependency on nothing. That is exactly the shape of an OCI artifact, and
 the infrastructure for moving OCI artifacts around is already deployed
-almost everywhere: registries, mirrors, caches, auth, signing, retention
-policies, quotas.
+almost everywhere: OCI registries, mirrors, caches, auth, signing,
+retention policies, quotas.
 
 `llmman` is a command-line tool built on that premise. Models are
-packaged as standard OCI artifacts and stored in any compatible
+packaged as standard OCI artifacts and stored in any compatible OCI
 registry — Docker Hub, GHCR, quay, or something self-hosted — and
 `llmman serve` exposes Ollama-, OpenAI-, and Anthropic-compatible HTTP
 APIs on top of the local store.
@@ -104,8 +104,8 @@ upgrades are not gated on an llmman release.
 
 ## Transfer without landing on disk
 
-Because both ends are just registries, an image can be streamed from a
-source straight to a destination without being stored locally first:
+Because both ends are just OCI registries, an image can be streamed from
+a source straight to a destination without being stored locally first:
 
 ```sh
 llmman transfer hf.co/unsloth/Qwen3.5-0.8B-GGUF docker.io/owner/model:latest
@@ -113,7 +113,7 @@ llmman transfer hf.co/unsloth/Qwen3.5-0.8B-GGUF docker.io/owner/model:latest
 
 Any source `llmman pull` understands — an OCI registry, `hf://`, `ms://`
 — can be paired with any OCI registry destination. This is the
-convenient path for getting a model out of HuggingFace and into the
+convenient path for getting a model out of HuggingFace and into the OCI
 registry your cluster actually pulls from, on a machine that may not
 have room for the weights at all.
 

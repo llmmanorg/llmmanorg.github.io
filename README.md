@@ -52,9 +52,15 @@ Notes:
 
 ## Editing the landing page
 
-Copy on the home page — the tagline, install commands, and the "What you
+Copy on the home page — the tagline, the subtitle, and the "What you
 get" cards — lives in `[extra]` in `config.toml`, so it can be changed
 without touching templates. Layout lives in `templates/index.html`.
+
+The hero logo is `static/llmman-mark.png`: the manatee from the
+[org logo](https://github.com/llmmanorg), background removed so it sits
+on the dark page. The wordmark underneath it was dropped, since it is
+dark teal (unreadable on this background) and redundant next to the
+site header.
 
 ## Layout
 
@@ -68,7 +74,9 @@ templates/blog.html      blog index
 templates/post.html      single post
 templates/taxonomy_*.html  tag pages
 static/style.css         all styling
-static/favicon.svg
+static/llmman-mark.png   hero logo (manatee, transparent)
+static/favicon.png
+static/apple-touch-icon.png
 ```
 
 ## Deployment

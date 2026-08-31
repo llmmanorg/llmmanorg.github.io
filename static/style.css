@@ -114,26 +114,25 @@ p { margin: 0 0 1em; }
 
 /* ---------- hero ---------- */
 
-.hero { padding: clamp(3rem, 8vw, 6rem) 0 1rem; }
+.hero { padding: clamp(3rem, 8vw, 6rem) 0 clamp(1.5rem, 4vw, 3rem); }
 .hero h1 { max-width: 38rem; }
 .hero .lede { font-size: 1.18rem; }
 
-.install {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
-  gap: 1rem;
-  margin: 2rem 0 1.75rem;
+.hero-inner {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 3.25rem);
+  flex-wrap: wrap;
 }
 
-.install-label {
-  display: block;
-  font-family: var(--mono);
-  font-size: 0.76rem;
-  text-transform: uppercase;
-  letter-spacing: 0.09em;
-  color: var(--muted);
-  margin-bottom: 0.45rem;
+.hero-mark {
+  flex: 0 0 auto;
+  width: clamp(9rem, 16vw, 12.5rem);
+  height: auto;
+  filter: drop-shadow(0 0.6rem 1.6rem rgba(110, 231, 199, 0.14));
 }
+
+.hero-copy { flex: 1 1 24rem; min-width: 0; }
 
 pre.cmd {
   margin: 0;
@@ -188,14 +187,13 @@ pre.cmd::before { content: "$ "; color: var(--accent-2); }
   border-bottom: 1px solid var(--line);
 }
 
-.steps, .features {
+.features {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
   gap: 1.25rem;
 }
 
-.step h3, .feature h3 { color: var(--head); margin-bottom: 0.6rem; }
-.step-note { color: var(--muted); font-size: 0.9rem; margin: 0.7rem 0 0; }
+.feature h3 { color: var(--head); margin-bottom: 0.6rem; }
 
 .feature {
   background: var(--bg-soft);
