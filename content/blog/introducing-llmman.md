@@ -35,32 +35,31 @@ Windows, in PowerShell:
 irm https://raw.githubusercontent.com/llmmanorg/llmman/main/install.ps1 | iex
 ```
 
-## Pull and serve
+## Run
 
-Pulling a model looks like pulling an image, and short names work
-wherever a model reference is accepted:
-
-```sh
-llmman pull gemma4
-```
-
-Then start the server:
+One command pulls the model if it is not already local, starts the
+background daemon if it is not already running, and drops you into an
+interactive chat:
 
 ```sh
-llmman serve
+llmman run gemma4
 ```
 
-It listens on `127.0.0.1:17434` by default, overridable with
-`LLMMAN_HOST`. Models are loaded on demand: each one gets its own
-backend subprocess on a random loopback port, and subsequent requests
-reuse the running process. An idle model is unloaded after `keep_alive`
-(five minutes by default, matching Ollama), and `llmman ps` reports each
-loaded model's `expires_at`.
+Short names work wherever a model reference is accepted. Pass a prompt
+after the model for a one-shot answer instead of a session.
+
+Models are loaded on demand: each one gets its own backend subprocess on
+a random loopback port, and subsequent requests reuse the running
+process. An idle model is unloaded after `keep_alive` (five minutes by
+default, matching Ollama), and `llmman ps` reports each loaded model's
+`expires_at`.
 
 ## Three API dialects, one port
 
-The daemon answers three families of routes at once, so most existing
-clients need no changes beyond an endpoint:
+That daemon is `llmman serve`, and you can start it on its own rather
+than letting `run` do it. It listens on `127.0.0.1:17434` by default,
+overridable with `LLMMAN_HOST`, and answers three families of routes at
+once, so most existing clients need no changes beyond an endpoint:
 
 | API | Endpoints |
 |-----|-----------|
