@@ -67,21 +67,6 @@ once, so most existing clients need no changes beyond an endpoint:
 | OpenAI | `/v1/chat/completions`, `/v1/completions`, `/v1/embeddings`, `/v1/models`, `/v1/responses` |
 | Anthropic | `/v1/messages` |
 
-Which means the Ollama CLI itself works against it:
-
-```sh
-OLLAMA_HOST=127.0.0.1:17434 ollama run gemma4
-```
-
-`/api/chat` also carries Ollama's `tools` (function calling, streamed
-back as `message.tool_calls`), `images` for vision models in the same
-base64 wire format, and `format` (either `"json"` or a full JSON Schema
-object) for constrained structured output.
-
-`/v1/responses` implements the OpenAI Responses API, the dialect
-[OpenAI Codex](https://github.com/openai/codex) requires, including
-streaming SSE and function-tool-call re-mapping.
-
 ## No embedded inference engine
 
 llmman does not ship its own inference engine. It picks an existing one
@@ -151,27 +136,7 @@ also requires a local daemon: `llmman serve` speaks plain HTTP with no
 authentication, so llmman will not hand an integration a real key
 addressed at a remote `LLMMAN_HOST`.
 
-## The store is just an OCI layout
-
-Locally, models live in:
-
-| OS | Path |
-|----|------|
-| Linux, macOS | `~/.local/share/llmman/store` |
-| Windows | `%LOCALAPPDATA%\llmman\store` |
-
-Set `LLMMAN_MODELS` to change it, the same way `OLLAMA_MODELS` works.
-The directory is an
-[OCI Image Layout](https://github.com/opencontainers/image-spec/blob/main/image-layout.md),
-so `docker` and `podman` can read it directly. Nothing about a model on
-disk is llmman-specific, which is the whole point: if llmman is the
-wrong tool for you later, the artifacts are not stranded.
-
 ## Try it
-
-llmman is written in Rust and Apache-2.0 licensed. The source, the full
-list of commands, and the complete set of `LLMMAN_*` environment
-variables are on GitHub:
 
 [github.com/llmmanorg/llmman](https://github.com/llmmanorg/llmman)
 
