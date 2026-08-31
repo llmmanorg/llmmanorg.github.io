@@ -99,7 +99,6 @@ p { margin: 0 0 1em; }
   color: var(--head);
 }
 .brand:hover { text-decoration: none; color: var(--head); }
-.brand-prompt { color: var(--accent-2); }
 
 .site-nav { display: flex; gap: 1.25rem; align-items: center; flex-wrap: wrap; }
 .site-nav a { color: var(--muted); font-size: 0.94rem; }
@@ -133,6 +132,13 @@ p { margin: 0 0 1em; }
 }
 
 .hero-copy { flex: 1 1 24rem; min-width: 0; }
+
+.hero-note {
+  margin: 1.25rem 0 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+.hero-note a { color: var(--accent-2); }
 
 pre.cmd {
   margin: 0;

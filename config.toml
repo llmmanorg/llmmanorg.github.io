@@ -25,10 +25,11 @@ theme = "one-dark-pro"
 [extra]
 # Edit copy here rather than in the templates.
 tagline = "Models are just OCI artifacts."
-subtitle = "llmman packages LLM models as standard OCI images, stores them in any OCI registry you already run, and serves them over Ollama-, OpenAI- and Anthropic-compatible APIs."
+subtitle = "llmman packages LLM models as CNCF ModelPack artifacts, stores them in any OCI registry you already run, and serves them over Ollama-, OpenAI- and Anthropic-compatible APIs."
 
 repo_url = "https://github.com/llmmanorg/llmman"
 repo_name = "llmmanorg/llmman"
+modelpack_url = "https://github.com/modelpack/model-spec"
 
 [[extra.features]]
 title = "Any OCI registry"
@@ -40,7 +41,7 @@ body = "`llmman serve` answers Ollama, OpenAI (including `/v1/responses`) and An
 
 [[extra.features]]
 title = "Bring your own engine"
-body = "GGUF models are served by `llama-server`, safetensors by `vllm`, or by `mlx_lm.server` on Apple Silicon. llmman fetches a matching build if you have none."
+body = "GGUF models are served by `llama-server`, safetensors by `vllm`, or by MLX on Apple Silicon. llmman fetches a matching build if you have none."
 
 [[extra.features]]
 title = "Launch integrations"
