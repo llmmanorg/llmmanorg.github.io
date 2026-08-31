@@ -18,10 +18,6 @@ taxonomies = [
 smart_punctuation = true
 render_emoji = false
 
-[markdown.highlighting]
-style = "inline"
-theme = "one-dark-pro"
-
 [extra]
 # Edit copy here rather than in the templates.
 tagline = "Models are just OCI artifacts."

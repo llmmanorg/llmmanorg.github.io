@@ -15,7 +15,7 @@ retention policies, quotas.
 
 `llmman` is a command-line tool built on that premise. Models are
 packaged as standard OCI artifacts and stored in any compatible OCI
-registry — Docker Hub, GHCR, quay, or something self-hosted — and
+registry (Docker Hub, GHCR, quay, or something self-hosted), and
 `llmman serve` exposes Ollama-, OpenAI-, and Anthropic-compatible HTTP
 APIs on top of the local store.
 
@@ -75,8 +75,8 @@ OLLAMA_HOST=127.0.0.1:17434 ollama run gemma4
 
 `/api/chat` also carries Ollama's `tools` (function calling, streamed
 back as `message.tool_calls`), `images` for vision models in the same
-base64 wire format, and `format` — either `"json"` or a full JSON Schema
-object — for constrained structured output.
+base64 wire format, and `format` (either `"json"` or a full JSON Schema
+object) for constrained structured output.
 
 `/v1/responses` implements the OpenAI Responses API, the dialect
 [OpenAI Codex](https://github.com/openai/codex) requires, including
@@ -97,9 +97,9 @@ based on the model format:
   whenever it is on `PATH`: Metal-accelerated, no vLLM dependency, and
   it covers more model families than vllm-metal does.
 
-That keeps llmman's own job small — resolve a reference, materialize the
-weights, start the right process, route the request — and means engine
-upgrades are not gated on an llmman release.
+That keeps llmman's own job small: resolve a reference, materialize the
+weights, start the right process, route the request. It also means
+engine upgrades are not gated on an llmman release.
 
 ## Transfer without landing on disk
 
@@ -110,8 +110,8 @@ a source straight to a destination without being stored locally first:
 llmman transfer hf.co/unsloth/Qwen3.5-0.8B-GGUF docker.io/owner/model:latest
 ```
 
-Any source `llmman pull` understands — an OCI registry, `hf://`, `ms://`
-— can be paired with any OCI registry destination. This is the
+Any source `llmman pull` understands (an OCI registry, `hf://`, `ms://`)
+can be paired with any OCI registry destination. This is the
 convenient path for getting a model out of HuggingFace and into the OCI
 registry your cluster actually pulls from, on a machine that may not
 have room for the weights at all.

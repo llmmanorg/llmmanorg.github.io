@@ -8,7 +8,7 @@
   --muted: #8a94a8;
   --accent: #7aa2f7;
   --accent-2: #6ee7c7;
-  --code-bg: #282c34;
+  --code-bg: #151a25;
   --mono: ui-monospace, "SF Mono", "JetBrains Mono", "Fira Code", Menlo, Consolas, monospace;
   --sans: system-ui, -apple-system, "Segoe UI", Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
   --wrap: 68rem;
@@ -284,6 +284,9 @@ pre.cmd::before { content: "$ "; color: var(--accent-2); }
   padding: 0.1em 0.36em;
 }
 
+/* Code blocks are deliberately unhighlighted: every block on this site is
+   a shell command, and token colouring turns a one-liner into a rainbow
+   while mis-reading things like a model name as a literal. */
 .prose pre {
   background: var(--code-bg);
   border: 1px solid var(--line);
@@ -293,28 +296,14 @@ pre.cmd::before { content: "$ "; color: var(--accent-2); }
   font-size: 0.86rem;
   line-height: 1.6;
   margin: 1.4rem 0;
+  color: var(--text);
 }
 .prose pre code {
   background: none;
   border: 0;
   padding: 0;
   font-size: inherit;
-}
-
-/* Required by Zola's Giallo highlighter (line wrappers + line numbers). */
-.giallo-l {
-  display: inline-block;
-  min-height: 1lh;
-  width: 100%;
-}
-.giallo-ln {
-  display: inline-block;
-  user-select: none;
-  margin-right: 0.4em;
-  padding: 0.4em;
-  min-width: 3ch;
-  text-align: right;
-  opacity: 0.8;
+  color: inherit;
 }
 
 .prose table {
