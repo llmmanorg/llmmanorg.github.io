@@ -104,9 +104,7 @@ request still goes to the slow box. Load-aware spreading is the obvious
 next step and I left it out to keep the first version small. Second,
 `llmman serve` has no authentication and no TLS, so an aggregation is
 for a network you already trust, the same caveat as any non-loopback
-`LLMMAN_HOST`. If your distribution ships a host firewall, open
-`17434/tcp`, or the node is silently just not part of anyone's
-aggregation. I learned that one the hard way on Fedora.
+`LLMMAN_HOST`.
 
 The full write-up is in
 [docs/aggregation.md](https://github.com/llmmanorg/llmman/blob/main/docs/aggregation.md).
