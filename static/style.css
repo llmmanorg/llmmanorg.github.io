@@ -178,7 +178,7 @@ pre.cmd::before { content: "$ "; color: var(--accent-2); }
 
 /* ---------- sections ---------- */
 
-.section { padding: 2.75rem 0; }
+.section { padding-top: 2.75rem; padding-bottom: 2.75rem; }
 .page-head { padding-top: clamp(2.5rem, 6vw, 4rem); padding-bottom: 0.5rem; }
 
 .section-title {
