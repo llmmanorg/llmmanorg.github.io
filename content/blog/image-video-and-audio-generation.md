@@ -49,8 +49,7 @@ Video saved to: a-manatee-surfaces-in-a-sunny-lagoon-gulls-cry-ove-20260907-2215
 <video controls preload="metadata" width="768" height="512" src="https://github.com/llmmanorg/llmmanorg.github.io/releases/download/blog-media-generation/manatee.mp4"></video>
 
 768×512 at 24 fps, H.264 with an AAC track generated at the same time
-as the frames. The mp4 needs `ffmpeg` on `PATH`; without it the frames
-and the wav come back separately.
+as the frames.
 
 ## What happened underneath
 
