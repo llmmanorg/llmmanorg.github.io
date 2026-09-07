@@ -64,10 +64,6 @@ role.
 (text-encoder hidden states, connectors, the audio-video transformer,
 both VAEs, the vocoder, the prompt enhancer) is written in Rust on top
 of ggml graphs, and it `dlopen`s `libggml` and `libllama`.
-Whatever GPU backend ships in that release is what runs: Metal on a Mac,
-CUDA on Windows, Vulkan or ROCm on Linux, and with `--ociman` the same
-backend runs inside the `ghcr.io/ggml-org/llama.cpp` image, which is
-how Linux gets CUDA. There is nothing to build and no second binary.
 
 The daemon exposes it as `/v1/images/generations`, `/v1/videos` and
 `/v1/audio/speech`, so anything that speaks the OpenAI image API can
