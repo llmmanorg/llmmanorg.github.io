@@ -58,7 +58,7 @@ The first `run` pulled `ltx-2.3` from Docker Hub: the distilled
 Q4_K_M transformer (13 GB), its video and audio VAEs, the text
 projection, and the Gemma 3 12B text encoder the model was trained with
 (7 GB). Each file is a layer in one OCI artifact, annotated with its
-role, so `llmman push` and `llmman transfer` carry the whole thing.
+role.
 
 `llmman serve` then started a backend for it exactly as it starts
 `llama-server` for a text model, except the backend is llmman itself:
