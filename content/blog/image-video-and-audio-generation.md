@@ -1,5 +1,5 @@
 +++
-title = "llmman run now draws, films and records"
+title = "llmman now generates images, audio and video"
 description = "A diffusion model is a model like any other: llmman run ltx-2.3 turns a prompt into a picture, an mp4 with a soundtrack, or a wav, on whatever GPU you have."
 date = 2026-09-07
 
