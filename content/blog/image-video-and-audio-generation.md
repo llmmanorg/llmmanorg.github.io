@@ -80,10 +80,7 @@ measured on a DGX Spark (unified memory, text encoder on the GPU):
 | video, 8 s at 768×512 with audio | 55 GB |
 
 So a **32 GB** GPU or unified-memory machine is the practical minimum
-for images, and long high-resolution video wants 64 GB. Shorter clips
-and smaller frames scale down accordingly (`--seconds 2` at 512×320 fits
-comfortably in 36 GB), and `LLAMA_ARG_N_GPU_LAYERS=0` keeps the 7 GB
-text encoder in system RAM on machines where the GPU is the tight side.
+for images, and long high-resolution video wants 64 GB.
 
 ## Speed
 
