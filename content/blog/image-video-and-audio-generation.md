@@ -1,6 +1,6 @@
 +++
 title = "llmman run now draws, films and records"
-description = "A diffusion model is a model like any other: llmman run unsloth/LTX-2.3-GGUF turns a prompt into a picture, an mp4 with a soundtrack, or a wav, on whatever GPU you have."
+description = "A diffusion model is a model like any other: llmman run ltx-2.3 turns a prompt into a picture, an mp4 with a soundtrack, or a wav, on whatever GPU you have."
 date = 2026-09-07
 
 [taxonomies]
@@ -17,7 +17,7 @@ video with sound, or just the sound.
 ## An image
 
 ```sh
-llmman run unsloth/LTX-2.3-GGUF "A manatee gliding through clear turquoise water over a seagrass meadow, sunlight rippling on its back"
+llmman run ltx-2.3 "A manatee gliding through clear turquoise water over a seagrass meadow, sunlight rippling on its back"
 Image saved to: a-manatee-gliding-through-clear-turquoise-water-ov-20260907-203113.png
 ```
 
@@ -30,7 +30,7 @@ saved next to your shell.
 ## Eight seconds of audio
 
 ```sh
-llmman run unsloth/LTX-2.3-GGUF --audio --seconds 8 "Underwater ambience: a manatee chewing seagrass, soft bubbles and gentle waves lapping above"
+llmman run ltx-2.3 --audio --seconds 8 "Underwater ambience: a manatee chewing seagrass, soft bubbles and gentle waves lapping above"
 Audio saved to: underwater-ambience-a-manatee-chewing-seagrass-sof-20260907-203237.wav
 ```
 
@@ -42,7 +42,7 @@ renders a small clip behind the scenes and keeps only the soundtrack.
 ## Eight seconds of video
 
 ```sh
-llmman run unsloth/LTX-2.3-GGUF --video --seconds 8 "A manatee swims slowly through a sunlit spring, turning to look at the camera, seagrass swaying, bubbles rising"
+llmman run ltx-2.3 --video --seconds 8 "A manatee swims slowly through a sunlit spring, turning to look at the camera, seagrass swaying, bubbles rising"
 Video saved to: a-manatee-swims-slowly-through-a-sunlit-spring-tur-20260907-203722.mp4
 ```
 
@@ -54,13 +54,11 @@ and the wav come back separately.
 
 ## What happened underneath
 
-The first `run` pulled `unsloth/LTX-2.3-GGUF` the way llama.cpp's `-hf`
-would resolve it: the distilled Q4_K_M transformer (13 GB), its video
-and audio VAEs, the text projection, and the Gemma 3 12B text encoder
-the model was trained with (7 GB, from its own repository). Each file is
-a layer in one OCI artifact, annotated with its role, so `llmman push`
-and `llmman transfer` carry the whole thing, and `docker.io/ai/ltx-2.3`
-is that artifact published.
+The first `run` pulled `ai/ltx-2.3` from Docker Hub: the distilled
+Q4_K_M transformer (13 GB), its video and audio VAEs, the text
+projection, and the Gemma 3 12B text encoder the model was trained with
+(7 GB). Each file is a layer in one OCI artifact, annotated with its
+role, so `llmman push` and `llmman transfer` carry the whole thing.
 
 `llmman serve` then started a backend for it exactly as it starts
 `llama-server` for a text model, except the backend is llmman itself:
@@ -102,10 +100,6 @@ eight denoising steps were 0.6 s each. Eight seconds of audio took 45 s. The
 eight-second 768×512 video took four minutes: 24 s per step over 9,216
 latent tokens, then 21 s to decode 185 frames. A second prompt skips
 the load.
-
-Outputs are deterministic for a seed (`--seed`, or `/set seed` in the
-interactive loop), and the same seed reproduces the reference C++
-implementation up to GPU rounding.
 
 The full flag list is in the
 [README](https://github.com/llmmanorg/llmman#generate-images-video-and-audio).
