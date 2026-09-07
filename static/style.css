@@ -265,7 +265,8 @@ pre.cmd::before { content: "$ "; color: var(--accent-2); }
 .prose > h3 { margin-top: 1.9rem; font-size: 1.05rem; }
 .prose ul, .prose ol { padding-left: 1.35rem; margin: 0 0 1.1em; }
 .prose li { margin-bottom: 0.4em; }
-.prose img { max-width: 100%; height: auto; border-radius: var(--radius); }
+.prose img, .prose video { max-width: 100%; height: auto; border-radius: var(--radius); }
+.prose audio { width: 100%; }
 .prose hr { border: 0; border-top: 1px solid var(--line); margin: 2.5rem 0; }
 
 .prose blockquote {
