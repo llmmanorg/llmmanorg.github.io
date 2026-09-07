@@ -60,12 +60,10 @@ projection, and the Gemma 3 12B text encoder the model was trained with
 (7 GB). Each file is a layer in one OCI artifact, annotated with its
 role.
 
-`llmman serve` then started a backend for it exactly as it starts
-`llama-server` for a text model, except the backend is llmman itself:
-the LTX-2 pipeline (text-encoder hidden states, connectors, the
-audio-video transformer, both VAEs, the vocoder, the prompt enhancer)
-is written in Rust on top of ggml graphs, and it `dlopen`s `libggml`
-and `libllama` from the llama.cpp release llmman already downloads.
+`llmman serve` then started a backend for it, the LTX-2 pipeline
+(text-encoder hidden states, connectors, the audio-video transformer,
+both VAEs, the vocoder, the prompt enhancer) is written in Rust on top
+of ggml graphs, and it `dlopen`s `libggml` and `libllama`.
 Whatever GPU backend ships in that release is what runs: Metal on a Mac,
 CUDA on Windows, Vulkan or ROCm on Linux, and with `--ociman` the same
 backend runs inside the `ghcr.io/ggml-org/llama.cpp` image, which is
