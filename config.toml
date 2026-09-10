@@ -1,6 +1,6 @@
 base_url = "https://llmmanorg.github.io"
 title = "llmman"
-description = "Manage and serve LLM models as standard OCI artifacts. Ollama-, OpenAI-, and Anthropic-compatible APIs from one small binary."
+description = "Run any agent on any model. llmman points Claude Code, Codex, OpenCode and others at a model on your own machine, or at any hosted provider, in one command."
 
 default_language = "en"
 compile_sass = false
@@ -19,34 +19,46 @@ smart_punctuation = true
 render_emoji = false
 
 [extra]
-# Edit copy here rather than in the templates.
-tagline = "Models are just OCI artifacts."
-subtitle = "llmman packages LLM models as CNCF ModelPack artifacts, stores them in any OCI registry you already run, and serves them over Ollama-, OpenAI- and Anthropic-compatible APIs."
+# Edit landing-page copy here rather than in the templates.
+tagline = "Run any agent on any model."
+subtitle = "Claude Code, Codex, OpenCode and eight others, pointed at a model running on your own machine, or at any hosted provider, in one command."
+
+hero_cmd = "llmman launch claude --model qwen3.8"
+hero_cmd_note = "Downloads a llama.cpp build for your GPU, starts a server, loads the model, and opens Claude Code against it."
+demo_gif = "https://github.com/llmmanorg/llmman/releases/download/docs-assets/launch.gif"
 
 repo_url = "https://github.com/llmmanorg/llmman"
 repo_name = "llmmanorg/llmman"
-modelpack_url = "https://github.com/modelpack/model-spec"
 
-[[extra.features]]
-title = "Any OCI registry"
-body = "Docker Hub, GHCR, quay, or something self-hosted. The local store is a plain OCI Image Layout, so `docker` and `podman` can read it too."
+[[extra.install]]
+label = "Linux, macOS"
+cmd = "curl -fsSL https://llmmanorg.github.io/install.sh | sh"
 
-[[extra.features]]
-title = "Three APIs, one server"
-body = "`llmman serve` answers Ollama, OpenAI (including `/v1/responses`) and Anthropic routes on the same port, so existing clients need no patching."
+[[extra.install]]
+label = "Homebrew"
+cmd = "brew install llmmanorg/tap/llmman"
 
-[[extra.features]]
-title = "Bring your own engine"
-body = "GGUF models are served by `llama-server`, safetensors by `vllm`, or by MLX on Apple Silicon. llmman fetches a matching build if you have none."
+[[extra.install]]
+label = "Windows"
+cmd = "irm https://llmmanorg.github.io/install.ps1 | iex"
 
-[[extra.features]]
-title = "Launch integrations"
-body = "`llmman launch claude --model gemma4` starts the daemon, preloads the model, wires up the environment and execs the tool."
+# Plain sentences, one command each. No cards.
+[[extra.points]]
+title = "Local or hosted, same command"
+body = "`--provider` sends the same agent to OpenRouter, Groq, Anthropic or any other provider listed on models.dev. Your key travels per request and is never written to the agent's config."
+cmd = "llmman launch codex --provider openrouter --model qwen/qwen3-coder"
 
-[[extra.features]]
-title = "Registry-to-registry transfer"
-body = "`llmman transfer` streams an image straight from HuggingFace to an OCI registry without ever landing the weights on your disk."
+[[extra.points]]
+title = "One endpoint your existing tools already speak"
+body = "`llmman serve` answers Ollama, OpenAI and Anthropic routes on one port. Anything built for one of those works unchanged. GGUF runs on upstream `llama.cpp`, safetensors on `vllm` or `mlx-lm`."
+cmd = "OLLAMA_HOST=127.0.0.1:17434 ollama run unsloth/Qwen3.5-0.8B-GGUF"
 
-[[extra.features]]
-title = "Hosted models too"
-body = "`--provider openrouter` points the same integrations at a model llmman does not serve itself, with the provider list resolved from models.dev at runtime."
+[[extra.points]]
+title = "No curated library, no account"
+body = "Models are plain OCI images. Pull from Hugging Face or from any container registry, or copy one straight into your own registry without it touching your disk. Sign it with cosign; refuse unsigned pulls if you want to."
+cmd = "llmman transfer hf.co/unsloth/Qwen3.5-0.8B-GGUF docker.io/you/qwen3.5:0.8b"
+
+[[extra.points]]
+title = "Several machines, one endpoint"
+body = "Name your other machines and a request to any of them runs wherever the model is already loaded, or wherever there is the most room for it. No leader, nothing shared."
+cmd = "llmman config set aggregation.peers asahi,spark"

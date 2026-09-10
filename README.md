@@ -52,9 +52,17 @@ Notes:
 
 ## Editing the landing page
 
-Copy on the home page — the tagline, the subtitle, and the "What you
-get" cards — lives in `[extra]` in `config.toml`, so it can be changed
-without touching templates. Layout lives in `templates/index.html`.
+Copy on the home page — the tagline, the subtitle, the hero command,
+the install commands and the "What else it does" points — lives in
+`[extra]` in `config.toml`, so it can be changed without touching
+templates. Layout lives in `templates/index.html`.
+
+The page is meant to answer "what is this?" in the first screen: one
+sentence, one command, what that command does. Everything below it is
+one plain paragraph and one command per point. No feature-card grid.
+
+The demo GIF is served from the llmman repo's `docs-assets` release, the
+same one the README embeds, so the two stay in sync.
 
 The hero logo is `static/llmman-mark.png`: the manatee from the
 [org logo](https://github.com/llmmanorg), background removed so it sits
@@ -77,6 +85,8 @@ static/style.css         all styling
 static/llmman-mark.png   hero logo (manatee, transparent)
 static/favicon.png
 static/apple-touch-icon.png
+static/install.sh        served at /install.sh (curl | sh)
+static/install.ps1       served at /install.ps1 (irm | iex)
 ```
 
 ## Deployment

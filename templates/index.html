@@ -10,29 +10,44 @@
     <div class="hero-copy">
       <h1>{{ config.extra.tagline }}</h1>
       <p class="lede">{{ config.extra.subtitle }}</p>
+      <pre class="cmd"><code>{{ config.extra.hero_cmd }}</code></pre>
+      <p class="cmd-note">{{ config.extra.hero_cmd_note }}</p>
       <p class="hero-links">
-        <a class="btn" href="{{ config.extra.repo_url }}">Read the docs</a>
-        <a class="btn btn-quiet" href="{{ get_url(path='@/blog/_index.md') }}">Blog</a>
-      </p>
-      <p class="hero-note">
-        Built on the
-        <a href="{{ config.extra.modelpack_url }}">CNCF ModelPack</a>
-        specification — an open format, not llmman's own.
+        <a class="btn" href="#install">Install</a>
+        <a class="btn btn-quiet" href="{{ config.extra.repo_url }}">GitHub</a>
       </p>
     </div>
   </div>
 </section>
 
-<section class="wrap section">
-  <h2 class="section-title">What you get</h2>
-  <div class="features">
-    {% for f in config.extra.features %}
-    <article class="feature">
-      <h3>{{ f.title }}</h3>
-      <p>{{ f.body | markdown(inline=true) | safe }}</p>
-    </article>
+<section class="wrap demo">
+  <img src="{{ config.extra.demo_gif }}"
+       alt="Terminal recording: llmman launch claude --model qwen3.8 starts a local server and opens Claude Code answering from the local model"
+       width="900" loading="lazy">
+</section>
+
+<section class="wrap section" id="install">
+  <h2 class="section-title">Install</h2>
+  <div class="install">
+    {% for i in config.extra.install %}
+    <div class="install-row">
+      <span class="install-label">{{ i.label }}</span>
+      <pre class="cmd"><code>{{ i.cmd }}</code></pre>
+    </div>
     {% endfor %}
   </div>
+  <p class="muted small">Also <code>winget install llmmanorg.llmman</code> and <code>cargo binstall llmman</code>. Apache-2.0, one binary.</p>
+</section>
+
+<section class="wrap section">
+  <h2 class="section-title">What else it does</h2>
+  {% for p in config.extra.points %}
+  <div class="point">
+    <h3>{{ p.title }}</h3>
+    <p>{{ p.body | markdown(inline=true) | safe }}</p>
+    <pre class="cmd"><code>{{ p.cmd }}</code></pre>
+  </div>
+  {% endfor %}
 </section>
 
 {% set blog = get_section(path="blog/_index.md") %}
