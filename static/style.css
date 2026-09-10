@@ -205,8 +205,6 @@ pre.cmd::before { content: "$ "; color: var(--accent-2); }
   border-bottom: 1px solid var(--line);
 }
 
-.small { font-size: 0.9rem; }
-
 /* ---------- install ---------- */
 
 .install { display: grid; gap: 0.75rem; margin-bottom: 1rem; }
