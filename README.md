@@ -89,6 +89,14 @@ static/install.sh        served at /install.sh (curl | sh)
 static/install.ps1       served at /install.ps1 (irm | iex)
 ```
 
+## Installers
+
+This repository is the source of truth for the public Unix and Windows
+installer scripts. Both installers verify downloaded release binaries against
+the release's `checksums.txt` before executing or installing them. The sibling
+`llmman` repository's end-to-end CI consumes the scripts deployed from this
+site, so installer changes should be made and tested here.
+
 ## Deployment
 
 `.github/workflows/deploy.yml` builds with Zola and publishes to GitHub
