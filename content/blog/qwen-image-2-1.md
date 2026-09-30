@@ -1,6 +1,6 @@
 +++
 title = "llmman now runs Qwen-Image 2.1"
-description = "llmman run qwen-image-2.1 turns a prompt into a 1024×1024 picture, straight from the model's Diffusers safetensors, on ggml. Done in partnership with Unsloth."
+description = "llmman run qwen-image-2.1 turns a prompt into a 1024×1024 picture, straight from the model's Diffusers safetensors, on ggml. Done in collaboration with Unsloth."
 date = 2026-09-29
 
 [taxonomies]
@@ -11,12 +11,12 @@ tags = ["run", "serve", "media", "unsloth"]
 month](@/blog/image-audio-and-video-generation.md). As of
 [#547](https://github.com/llmmanorg/llmman/pull/547) it also runs
 Qwen-Image 2.1, straight from the Diffusers safetensors the model is
-published as. We did this in partnership with
+published as. We did this in collaboration with
 [Unsloth](https://unsloth.ai).
 
 <!-- more -->
 
-## A sloth and a manatee
+## Quickstart Example
 
 Unsloth's mascot is a sloth and llmman's is a manatee, so the test
 prompt wrote itself.
