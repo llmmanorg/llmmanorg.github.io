@@ -47,6 +47,32 @@ check_path() {
 	return 1
 }
 
+install_systemd_unit() {
+	if command -v systemctl >/dev/null 2>/dev/null && systemctl is-system-running | grep -Eq '^(running|degraded)$'; then
+		echo "Installing user systemd service..."
+		mkdir -p "$HOME"/.config/systemd/user/
+		cat <<EOF > "$HOME"/.config/systemd/user/llmman.service
+#  SPDX-License-Identifier: Apache-2.0
+#
+#  This file is part of llmman.
+#
+[Unit]
+Description=llmman backend service
+Documentation=https://llmmanorg.github.io/
+
+[Service]
+Type=simple
+ExecStart="$HOME"/.local/bin/llmman serve
+Restart=always
+
+[Install]
+WantedBy=default.target
+EOF
+		systemctl --user daemon-reload
+		systemctl --user enable --now llmman.service
+	fi
+}
+
 main() {
 	check_bin curl || die "Please install curl"
 
@@ -103,8 +129,6 @@ main() {
 	mv "$HOME/.local/bin/llmman.new" "$HOME/.local/bin/llmman" || die \
 		"Couldn't install llmman to $HOME/.local/bin"
 
-	printf "Installation completed successfully\n\n"
-
 	if ! check_path "$PATH"; then
 		LOGIN_SHELL="${SHELL:-/bin/sh}"
 		LOGIN_PATH=$("$LOGIN_SHELL" -l -c 'echo $PATH' 2>/dev/null)
@@ -132,6 +156,10 @@ main() {
 			fi
 		fi
 	fi
+
+	install_systemd_unit
+
+	printf "Installation completed successfully\n\n"
 }
 
 main "$@"
