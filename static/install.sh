@@ -40,6 +40,12 @@ check_bin() {
 	command -v "$1" >/dev/null 2>/dev/null
 }
 
+use_brew() {
+	[ -z "$LLMMAN_VERSION$LLMMAN_BASE_URL$SKIP_INSTALL" ] || return 1
+	[ "$LLMMAN_REPO" = llmmanorg/llmman ] || return 1
+	[ ! -e "$HOME/.local/bin/llmman" ]
+}
+
 check_path() {
 	case ":$1:" in
 	(*":$HOME/.local/bin:"*) return 0 ;;
@@ -96,6 +102,13 @@ main() {
 	esac
 
 	[ "$HOME" ] || die "No HOME, please check your OS"
+
+	if use_brew; then
+		brew install llmmanorg/tap/llmman || die "brew install failed"
+		printf "To keep the llmman daemon running across logins: brew services start llmman\n"
+		printf "Installation completed successfully\n\n"
+		return
+	fi
 
 	ASSET="llmman-${TARGET}"
 	BASE_URL="${LLMMAN_BASE_URL:-https://github.com/$LLMMAN_REPO/releases}"
