@@ -70,12 +70,8 @@ hf.co/Qwen/Qwen3.5-4B                    7.8M      996      7 months ago    14%
 hf.co/Qwen/Qwen3.5-2B                    4.9M      423      7 months ago    7%
 ```
 
-Because it is all the daemon's UI, it works wherever that UI does: in
-a browser at `http://127.0.0.1:17434/#/models`, in
-[llmman-desktop](https://github.com/llmmanorg/llmman-desktop), and in
-the Android app, where the card gets the whole screen.
-
-<img src="https://github.com/llmmanorg/llmmanorg.github.io/releases/download/blog-models-page/models-page-phone.png" alt="The same model card at phone width" width="390" height="844" loading="lazy">
+To try it, run `llmman serve` and open
+`http://127.0.0.1:17434/#/models`.
 
 Details are in
 [docs/webui.md](https://github.com/llmmanorg/llmman/blob/main/docs/webui.md)
