@@ -4,7 +4,7 @@
 # user account by default on Windows 10/11. For Linux/macOS, use
 # install.sh instead.
 #
-#   irm https://raw.githubusercontent.com/llmmanorg/llmman/main/install.ps1 | iex
+#   irm https://llmmanorg.github.io/install.ps1 | iex
 #
 # GPU/backend detection happens at runtime inside the llmman binary
 # itself, the first time `llmman serve` needs a `llama-server` (see
@@ -51,9 +51,11 @@ function Main {
     $Version = $env:LLMMAN_VERSION
     if ($Version) {
         $Url = "$BaseUrl/download/$Version/$Asset"
+        $ChecksumUrl = "$BaseUrl/download/$Version/checksums.txt"
         "Version: $Version"
     } else {
         $Url = "$BaseUrl/latest/download/$Asset"
+        $ChecksumUrl = "$BaseUrl/latest/download/checksums.txt"
         "Version: latest"
     }
 
@@ -69,13 +71,47 @@ function Main {
                 "(has a release for $Target been published yet? see .github/workflows/ci.yml)"
         }
 
+        $Checksums = Join-Path $Dir "checksums.txt"
+        "Downloading checksums.txt..."
+        try {
+            Invoke-WebRequest -Uri $ChecksumUrl -OutFile $Checksums -UseBasicParsing
+        } catch {
+            Die "Failed to download $ChecksumUrl"
+        }
+
+        $ChecksumEntries = @()
+        foreach ($Line in Get-Content -LiteralPath $Checksums) {
+            $Parts = @($Line.Trim() -split '\s+')
+            if ($Parts.Count -ge 2 -and $Parts[-1] -ceq $Asset) {
+                $ChecksumEntries += ,$Parts
+            }
+        }
+        if ($ChecksumEntries.Count -ne 1 -or
+            $ChecksumEntries[0].Count -ne 2 -or
+            ![regex]::IsMatch($ChecksumEntries[0][0], '^[0-9A-Fa-f]{64}$')) {
+            Die "checksums.txt must contain exactly one valid SHA-256 entry for $Asset"
+        }
+
+        $Expected = $ChecksumEntries[0][0].ToLowerInvariant()
+        try {
+            $Actual = (Get-FileHash -LiteralPath $Tmp -Algorithm SHA256 -ErrorAction Stop).Hash.ToLowerInvariant()
+        } catch {
+            Die "Failed to calculate the SHA-256 checksum for $Asset"
+        }
+        if ($Actual -cne $Expected) {
+            Die "Checksum verification failed for $Asset" `
+                "Expected: $Expected" `
+                "Actual:   $Actual"
+        }
+        "Checksum verified for $Asset."
+
         & $Tmp --version *> $null
         if ($LASTEXITCODE) {
             Die "Downloaded llmman binary failed to run"
         }
 
         if ($env:SKIP_INSTALL) {
-            "Download verified, installation skipped (SKIP_INSTALL is set): $Tmp"
+            "Download and checksum verified; installation skipped (SKIP_INSTALL is set): $Tmp"
             return
         }
 

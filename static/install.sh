@@ -3,7 +3,7 @@
 # this host's OS/arch from GitHub Releases and installs it to
 # ~/.local/bin. For Windows, use install.ps1 instead.
 #
-#   curl -fsSL https://raw.githubusercontent.com/llmmanorg/llmman/main/install.sh | sh
+#   curl -fsSL https://llmmanorg.github.io/install.sh | sh
 #
 # GPU/backend detection happens at runtime inside the llmman binary
 # itself, the first time `llmman serve` needs a `llama-server` (see
@@ -114,9 +114,11 @@ main() {
 	BASE_URL="${LLMMAN_BASE_URL:-https://github.com/$LLMMAN_REPO/releases}"
 	if [ "$LLMMAN_VERSION" ]; then
 		URL="$BASE_URL/download/$LLMMAN_VERSION/$ASSET"
+		CHECKSUM_URL="$BASE_URL/download/$LLMMAN_VERSION/checksums.txt"
 		printf "Version: %s\n" "$LLMMAN_VERSION"
 	else
 		URL="$BASE_URL/latest/download/$ASSET"
+		CHECKSUM_URL="$BASE_URL/latest/download/checksums.txt"
 		printf "Version: latest\n"
 	fi
 
@@ -127,13 +129,50 @@ main() {
 	curl -fsSL "$URL" -o "$DIR/llmman.tmp" || die \
 		"Failed to download $URL" \
 		"(has a release for $TARGET been published yet? see .github/workflows/ci.yml)"
+	printf "Downloading checksums.txt...\n"
+	curl -fsSL "$CHECKSUM_URL" -o "$DIR/checksums.txt" || die \
+		"Failed to download $CHECKSUM_URL"
+
+	EXPECTED=$(awk -v asset="$ASSET" '
+		$2 == asset {
+			matches++
+			if (NF == 2 && length($1) == 64 && $1 ~ /^[0-9A-Fa-f]+$/) {
+				valid++
+				digest = $1
+			}
+		}
+		END {
+			if (matches == 1 && valid == 1) print digest
+			else exit 1
+		}
+	' "$DIR/checksums.txt") || die \
+		"checksums.txt must contain exactly one valid SHA-256 entry for $ASSET"
+
+	if check_bin sha256sum; then
+		ACTUAL=$(sha256sum "$DIR/llmman.tmp" | awk '{print $1}') || die \
+			"Failed to calculate the SHA-256 checksum for $ASSET"
+	elif check_bin shasum; then
+		ACTUAL=$(shasum -a 256 "$DIR/llmman.tmp" | awk '{print $1}') || die \
+			"Failed to calculate the SHA-256 checksum for $ASSET"
+	else
+		die "Cannot verify $ASSET: install sha256sum or shasum"
+	fi
+
+	EXPECTED=$(printf "%s" "$EXPECTED" | tr 'A-F' 'a-f')
+	ACTUAL=$(printf "%s" "$ACTUAL" | tr 'A-F' 'a-f')
+	[ "$ACTUAL" = "$EXPECTED" ] || die \
+		"Checksum verification failed for $ASSET" \
+		"Expected: $EXPECTED" \
+		"Actual:   $ACTUAL"
+	printf "Checksum verified for %s.\n" "$ASSET"
+
 	chmod +x "$DIR/llmman.tmp"
 
 	"$DIR/llmman.tmp" --version >/dev/null 2>&1 || die \
 		"Downloaded llmman binary failed to run"
 
 	if [ "$SKIP_INSTALL" ]; then
-		printf "Download verified, installation skipped (SKIP_INSTALL is set): %s\n" "$DIR/llmman.tmp"
+		printf "Download and checksum verified; installation skipped (SKIP_INSTALL is set): %s\n" "$DIR/llmman.tmp"
 		return
 	fi
 
