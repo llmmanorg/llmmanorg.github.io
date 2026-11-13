@@ -46,8 +46,8 @@ than `/v1/audio/transcriptions`.
 `llmman run` does not transcribe yet.
 
 Files are capped at 4 MiB, about 131 s of audio. Anything longer than
-30 s is split into equal clips and the texts are joined, since Canary
-was trained on utterances up to 40 s.
+30 s is split into equal clips and the texts are joined, since NeMo
+itself chunks audio longer than 40 s.
 
 ## Why a pipeline of its own
 
