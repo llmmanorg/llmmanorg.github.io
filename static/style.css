@@ -12,7 +12,8 @@
   --mono: ui-monospace, "SF Mono", "JetBrains Mono", "Fira Code", Menlo, Consolas, monospace;
   --sans: system-ui, -apple-system, "Segoe UI", Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
   --wrap: 68rem;
-  --radius: 10px;
+  --radius: 14px;
+  --pill: 999px;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -20,6 +21,10 @@
 html { -webkit-text-size-adjust: 100%; }
 
 body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
   margin: 0;
   background: var(--bg);
   color: var(--text);
@@ -27,7 +32,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Subtle top glow so the dark page is not flat. */
+/* Top glow. */
 body::before {
   content: "";
   position: fixed;
@@ -42,6 +47,12 @@ body > * { position: relative; z-index: 1; }
 
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+
+[hidden] { display: none !important; }
+
+main { flex: 1 0 auto; width: 100%; }
 
 h1, h2, h3, h4 {
   color: var(--head);
@@ -76,12 +87,12 @@ p { margin: 0 0 1em; }
 /* ---------- header ---------- */
 
 .site-header {
-  border-bottom: 1px solid var(--line);
   background: rgba(11, 14, 20, 0.72);
   backdrop-filter: blur(8px);
   position: sticky;
   top: 0;
   z-index: 5;
+  flex: 0 0 auto;
 }
 
 .header-inner {
@@ -89,85 +100,165 @@ p { margin: 0 0 1em; }
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  min-height: 3.75rem;
+  min-height: 3.5rem;
 }
 
 .brand {
-  font-family: var(--mono);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
   font-size: 1.05rem;
   font-weight: 600;
+  letter-spacing: -0.01em;
   color: var(--head);
+  white-space: nowrap;
 }
+.brand img { width: 1.6rem; height: 1.6rem; display: block; }
 .brand:hover { text-decoration: none; color: var(--head); }
 
-.site-nav { display: flex; gap: 1.25rem; align-items: center; flex-wrap: wrap; }
+.site-nav { display: flex; gap: 1.5rem; align-items: center; white-space: nowrap; }
 .site-nav a { color: var(--muted); font-size: 0.94rem; }
 .site-nav a:hover { color: var(--head); text-decoration: none; }
-.site-nav .nav-repo {
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: 0.28rem 0.8rem;
-  color: var(--text);
+.site-nav a.active { color: var(--head); }
+.site-nav .nav-icon { display: inline-flex; align-items: center; padding: 0.25rem; margin: -0.25rem; }
+.site-nav .nav-icon svg { display: block; }
+
+@media (max-width: 30rem) {
+  .header-inner { gap: 0.5rem; }
+  .site-nav { gap: 0.95rem; }
+  .site-nav a { font-size: 0.9rem; }
 }
-.site-nav .nav-repo:hover { border-color: var(--accent); color: var(--head); }
 
 /* ---------- hero ---------- */
 
-.hero { padding: clamp(3rem, 8vw, 6rem) 0 clamp(1.5rem, 4vw, 3rem); }
-.hero h1 { max-width: 38rem; }
-.hero .lede { font-size: 1.18rem; }
-
-.hero-inner {
+.hero {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: clamp(1.5rem, 4vw, 3.25rem);
-  flex-wrap: wrap;
+  text-align: center;
+  width: 100%;
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: clamp(2rem, 7dvh, 5rem) 1.25rem;
 }
 
 .hero-mark {
-  flex: 0 0 auto;
-  width: clamp(9rem, 16vw, 12.5rem);
+  width: clamp(5.5rem, 16dvh, 9rem);
   height: auto;
+  margin-bottom: clamp(0.75rem, 2.5dvh, 1.5rem);
   filter: drop-shadow(0 0.6rem 1.6rem rgba(110, 231, 199, 0.14));
 }
 
-.hero-copy { flex: 1 1 24rem; min-width: 0; }
-
-.hero .cmd { margin-top: 1.5rem; max-width: 46rem; }
-.cmd-note {
-  margin: 0.6rem 0 0;
-  font-size: 0.92rem;
-  color: var(--muted);
-  max-width: 46rem;
+.hero h1 {
+  font-size: clamp(1.8rem, 6.4vw, 2.75rem);
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+  margin-bottom: 0.6rem;
+}
+.hero .lede {
+  font-size: clamp(1rem, 1.5vw, 1.1rem);
+  line-height: 1.55;
+  max-width: 34rem;
+  margin: 0 auto clamp(1rem, 3.5dvh, 2rem);
 }
 
-.demo { padding: 0 1.25rem clamp(1.5rem, 4vw, 3rem); }
-.demo img {
-  display: block;
-  width: 100%;
-  max-width: 52rem;
-  margin: 0 auto;
-  height: auto;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-}
+.hero-cmd { width: 100%; max-width: 36rem; }
+.hero-cmd .pill-cmd { font-size: 0.95rem; }
 
-pre.cmd {
-  margin: 0;
+/* ---------- command pill ---------- */
+
+.pill {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
   background: var(--panel);
   border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 0.85rem 1rem;
-  overflow-x: auto;
-  font-family: var(--mono);
-  font-size: 0.86rem;
-  line-height: 1.6;
-  color: var(--text);
+  border-radius: var(--pill);
+  padding: 0.35rem 0.4rem 0.35rem 1.2rem;
+  text-align: left;
 }
-pre.cmd code { background: none; padding: 0; border: 0; font-size: inherit; color: inherit; }
-pre.cmd::before { content: "$ "; color: var(--accent-2); }
+.pill:hover { border-color: #2f3850; }
 
-.hero-links { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1.5rem; }
+.pill-cmd {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: block;
+  background: none;
+  border: 0;
+  padding: 0.3rem 0;
+  font-family: var(--mono);
+  font-size: 0.84rem;
+  line-height: 1.5;
+  color: var(--text);
+  white-space: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.pill-cmd::-webkit-scrollbar { display: none; }
+.pill-cmd::before { content: "$ "; color: var(--accent-2); }
+
+.copy {
+  display: none;
+  flex: 0 0 auto;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--line);
+  border-radius: var(--pill);
+  padding: 0.38rem 0.95rem;
+  cursor: pointer;
+}
+.js .copy { display: inline-block; }
+.copy:hover { color: var(--head); border-color: var(--accent); }
+
+@media (max-width: 34rem) {
+  .pill { border-radius: 1.4rem; align-items: flex-start; padding-left: 1rem; }
+  .pill-cmd { white-space: normal; overflow-wrap: anywhere; overflow: visible; }
+  .copy { margin-top: 0.1rem; }
+}
+
+/* ---------- install (home tabs) ---------- */
+
+.install { width: 100%; max-width: 36rem; margin-top: clamp(0.9rem, 2.5dvh, 1.5rem); }
+.install .install-panel { margin-top: 0.6rem; }
+.install .install-panel + .install-panel { margin-top: 1rem; }
+.install .pill-cmd { font-size: 0.82rem; }
+
+.tabs { display: none; justify-content: center; gap: 0.25rem; }
+.install.is-tabs .tabs { display: flex; }
+.install.is-tabs .install-label { display: none; }
+.install-label {
+  display: block;
+  text-align: left;
+  margin: 0 0 0.3rem 1.2rem;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.tabs button {
+  font: inherit;
+  font-size: 0.86rem;
+  color: var(--muted);
+  background: none;
+  border: 1px solid transparent;
+  border-radius: var(--pill);
+  padding: 0.25rem 0.8rem;
+  cursor: pointer;
+}
+.tabs button:hover { color: var(--head); }
+.tabs button[aria-selected="true"] {
+  color: var(--head);
+  background: var(--panel);
+  border-color: var(--line);
+}
+
+
+.hero-links { display: flex; justify-content: center; gap: 0.75rem; flex-wrap: wrap; margin: clamp(1rem, 3.5dvh, 2rem) 0 0; }
 
 .btn {
   display: inline-block;
@@ -175,8 +266,8 @@ pre.cmd::before { content: "$ "; color: var(--accent-2); }
   color: #08101f;
   font-weight: 600;
   font-size: 0.94rem;
-  padding: 0.6rem 1.1rem;
-  border-radius: 8px;
+  padding: 0.6rem 1.5rem;
+  border-radius: var(--pill);
   border: 1px solid transparent;
 }
 .btn:hover { text-decoration: none; filter: brightness(1.08); }
@@ -188,47 +279,25 @@ pre.cmd::before { content: "$ "; color: var(--accent-2); }
 }
 .btn-quiet:hover { border-color: var(--accent); color: var(--head); filter: none; }
 
+pre.cmd, .prose pre {
+  background: var(--code-bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow-x: auto;
+  font-size: 0.86rem;
+  line-height: 1.6;
+  color: var(--text);
+}
+pre.cmd { margin: 0; padding: 0.85rem 1rem; font-family: var(--mono); }
+pre.cmd::before { content: "$ "; color: var(--accent-2); }
+pre.cmd code, .prose pre code { background: none; border: 0; padding: 0; font-size: inherit; color: inherit; }
+
 /* ---------- sections ---------- */
 
 .section { padding-top: 2.75rem; padding-bottom: 2.75rem; }
 .page-head { padding-top: clamp(2.5rem, 6vw, 4rem); padding-bottom: 0.5rem; }
 
-.section-title {
-  font-family: var(--mono);
-  font-size: 0.8rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: var(--muted);
-  padding-bottom: 0.9rem;
-  margin-bottom: 1.75rem;
-  border-bottom: 1px solid var(--line);
-}
-
-/* ---------- install ---------- */
-
-.install { display: grid; gap: 0.75rem; margin-bottom: 1rem; }
-.install-row {
-  display: grid;
-  grid-template-columns: 8rem minmax(0, 1fr);
-  align-items: center;
-  gap: 1rem;
-}
-.install-label {
-  font-family: var(--mono);
-  font-size: 0.82rem;
-  color: var(--muted);
-}
-@media (max-width: 40rem) {
-  .install-row { grid-template-columns: minmax(0, 1fr); gap: 0.3rem; }
-}
-
-/* ---------- points ---------- */
-
-.point { max-width: 46rem; margin-bottom: 2.25rem; }
-.point:last-child { margin-bottom: 0; }
-.point h3 { margin-bottom: 0.4rem; }
-.point p { color: var(--muted); margin-bottom: 0.75rem; }
+.page-head .hero-links { justify-content: flex-start; }
 
 /* ---------- post lists ---------- */
 
@@ -264,7 +333,7 @@ pre.cmd::before { content: "$ "; color: var(--accent-2); }
   font-size: 0.76rem;
   color: var(--muted);
   border: 1px solid var(--line);
-  border-radius: 999px;
+  border-radius: var(--pill);
   padding: 0.15rem 0.6rem;
 }
 .tags a:hover { color: var(--head); border-color: var(--accent); text-decoration: none; }
@@ -306,27 +375,7 @@ code {
   padding: 0.1em 0.36em;
 }
 
-/* Code blocks are deliberately unhighlighted: every block on this site is
-   a shell command, and token colouring turns a one-liner into a rainbow
-   while mis-reading things like a model name as a literal. */
-.prose pre {
-  background: var(--code-bg);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 1rem 1.1rem;
-  overflow-x: auto;
-  font-size: 0.86rem;
-  line-height: 1.6;
-  margin: 1.4rem 0;
-  color: var(--text);
-}
-.prose pre code {
-  background: none;
-  border: 0;
-  padding: 0;
-  font-size: inherit;
-  color: inherit;
-}
+.prose pre { padding: 1rem 1.1rem; margin: 1.4rem 0; }
 
 .prose table {
   width: 100%;
@@ -363,6 +412,7 @@ code {
 /* ---------- footer ---------- */
 
 .site-footer {
+  flex: 0 0 auto;
   border-top: 1px solid var(--line);
   margin-top: 3rem;
   padding: 2rem 0;
@@ -372,11 +422,35 @@ code {
 .footer-inner p { margin: 0 0 0.3rem; }
 .site-footer a { color: var(--text); }
 
-@media (max-width: 34rem) {
-  .header-inner { flex-wrap: wrap; padding-top: 0.6rem; padding-bottom: 0.6rem; }
-  .site-nav { gap: 0.9rem; }
+.site-footer.compact { margin: 0; padding: 0.9rem 0; border-top: 0; font-size: 0.8rem; }
+.compact .footer-inner { text-align: center; line-height: 1.5; }
+.compact p { display: inline; margin: 0; }
+.compact p + p { display: inline-block; white-space: nowrap; margin-left: 0.2rem; }
+.compact p + p::before { content: "· "; }
+.compact .stop { display: none; }
+.compact a { color: var(--muted); }
+.compact a:hover { color: var(--head); }
+
+/* ---------- home: one screen, no scrolling ---------- */
+
+body.home main { display: flex; align-items: center; justify-content: center; min-height: 0; }
+
+@media (min-height: 35rem) {
+  .js body.home { height: 100vh; height: 100dvh; overflow: hidden; }
+  .js body.home main { flex: 1 1 0; }
+}
+
+/* Narrow phones: wrapped commands need more height, so scroll. */
+@media (max-width: 34rem) and (max-height: 50rem) {
+  .js body.home { height: auto; min-height: 100dvh; overflow: visible; }
+  .js body.home main { flex: 1 0 auto; }
+}
+
+@media (max-height: 46rem), (max-width: 34rem) and (max-height: 52rem) {
+  .hero { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+  .hero-mark { width: clamp(4.5rem, 13dvh, 7rem); margin-bottom: 0.6rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  * { transition: none !important; animation: none !important; }
+  * { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
 }

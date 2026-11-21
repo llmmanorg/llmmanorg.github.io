@@ -19,16 +19,15 @@ smart_punctuation = true
 render_emoji = false
 
 [extra]
-# Edit landing-page copy here rather than in the templates.
+# Landing-page copy.
 tagline = "Run any agent on any model."
-subtitle = "Claude Code, Codex, OpenCode and eight others, pointed at a model running on your own machine, or at any hosted provider, in one command."
+subtitle = "Claude Code, Codex, OpenCode and more, pointed at a model on your own machine or at any hosted provider, in one command."
 
 hero_cmd = "llmman launch claude --model qwen3.8"
-hero_cmd_note = "Downloads a llama.cpp build for your GPU, starts a server, loads the model, and opens Claude Code against it."
-demo_gif = "https://github.com/llmmanorg/llmman/releases/download/docs-assets/launch.gif"
 
 repo_url = "https://github.com/llmmanorg/llmman"
 repo_name = "llmmanorg/llmman"
+models_url = "https://hub.docker.com/u/ai"
 
 [[extra.install]]
 label = "Linux, macOS"
@@ -41,24 +40,3 @@ cmd = "brew install llmmanorg/tap/llmman"
 [[extra.install]]
 label = "Windows"
 cmd = "irm https://llmmanorg.github.io/install.ps1 | iex"
-
-# Plain sentences, one command each. No cards.
-[[extra.points]]
-title = "Local or hosted, same command"
-body = "`--provider` sends the same agent to OpenRouter, Groq, Anthropic or any other provider listed on models.dev. Your key travels per request and is never written to the agent's config."
-cmd = "llmman launch codex --provider openrouter --model qwen/qwen3-coder"
-
-[[extra.points]]
-title = "One endpoint your existing tools already speak"
-body = "`llmman serve` answers Ollama, OpenAI and Anthropic routes on one port. Anything built for one of those works unchanged. GGUF runs on upstream `llama.cpp`, safetensors on `vllm` or `mlx-lm`."
-cmd = "OLLAMA_HOST=127.0.0.1:17434 ollama run unsloth/Qwen3.5-0.8B-GGUF"
-
-[[extra.points]]
-title = "No curated library, no account"
-body = "Models are plain OCI images. Pull from Hugging Face or from any container registry, or copy one straight into your own registry without it touching your disk. Sign it with cosign; refuse unsigned pulls if you want to."
-cmd = "llmman transfer hf.co/unsloth/Qwen3.5-0.8B-GGUF docker.io/you/qwen3.5:0.8b"
-
-[[extra.points]]
-title = "Several machines, one endpoint"
-body = "Name your other machines and a request to any of them runs wherever the model is already loaded, or wherever there is the most room for it. No leader, nothing shared."
-cmd = "llmman config set aggregation.peers asahi,spark"

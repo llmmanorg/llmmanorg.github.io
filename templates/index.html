@@ -1,70 +1,39 @@
 {% extends "base.html" %}
 
+{% block body_class %}home{% endblock body_class %}
+
 {% block content %}
 <section class="hero">
-  <div class="wrap hero-inner">
-    <img class="hero-mark"
-         src="{{ get_url(path='llmman-mark.png', trailing_slash=false) }}"
-         alt="llmman logo: a manatee"
-         width="294" height="213">
-    <div class="hero-copy">
-      <h1>{{ config.extra.tagline }}</h1>
-      <p class="lede">{{ config.extra.subtitle }}</p>
-      <pre class="cmd"><code>{{ config.extra.hero_cmd }}</code></pre>
-      <p class="cmd-note">{{ config.extra.hero_cmd_note }}</p>
-      <p class="hero-links">
-        <a class="btn" href="#install">Install</a>
-        <a class="btn btn-quiet" href="{{ config.extra.repo_url }}">GitHub</a>
-      </p>
-    </div>
+  <img class="hero-mark"
+       src="{{ get_url(path='llmman-mark.png', trailing_slash=false) }}"
+       alt="llmman logo: a manatee"
+       width="294" height="213">
+  <h1>{{ config.extra.tagline }}</h1>
+  <p class="lede">{{ config.extra.subtitle }}</p>
+
+  <div class="hero-cmd">
+    {% set pill_cmd = config.extra.hero_cmd %}{% set pill_label = "Copy command" %}{% include "pill.html" %}
   </div>
-</section>
 
-<section class="wrap demo">
-  <img src="{{ config.extra.demo_gif }}"
-       alt="Terminal recording: llmman launch claude --model qwen3.8 starts a local server and opens Claude Code answering from the local model"
-       width="900" loading="lazy">
-</section>
-
-<section class="wrap section" id="install">
-  <h2 class="section-title">Install</h2>
-  <div class="install">
+  <div class="install" data-tabs>
+    <div class="tabs" role="tablist" aria-label="Install method">
+      {% for i in config.extra.install %}
+      <button type="button" role="tab" id="tab-{{ loop.index }}" aria-controls="panel-{{ loop.index }}" aria-selected="{{ loop.first }}"{% if not loop.first %} tabindex="-1"{% endif %}>{{ i.label }}</button>
+      {% endfor %}
+    </div>
     {% for i in config.extra.install %}
-    <div class="install-row">
+    <div class="install-panel" role="tabpanel" id="panel-{{ loop.index }}" aria-labelledby="tab-{{ loop.index }}">
       <span class="install-label">{{ i.label }}</span>
-      <pre class="cmd"><code>{{ i.cmd }}</code></pre>
+      {% set pill_cmd = i.cmd %}{% set pill_label = "Copy install command for " ~ i.label %}{% include "pill.html" %}
     </div>
     {% endfor %}
   </div>
-</section>
 
-<section class="wrap section">
-  <h2 class="section-title">What else it does</h2>
-  {% for p in config.extra.points %}
-  <div class="point">
-    <h3>{{ p.title }}</h3>
-    <p>{{ p.body | markdown(inline=true) | safe }}</p>
-    <pre class="cmd"><code>{{ p.cmd }}</code></pre>
-  </div>
-  {% endfor %}
+  <p class="hero-links">
+    <a class="btn" href="{{ config.extra.models_url }}" rel="noopener">Models</a>
+    <a class="btn btn-quiet" href="{{ get_url(path='@/blog/_index.md') }}">Blog</a>
+  </p>
 </section>
-
-{% set blog = get_section(path="blog/_index.md") %}
-{% if blog.pages | length > 0 %}
-<section class="wrap section">
-  <h2 class="section-title">From the blog</h2>
-  <ul class="post-list">
-    {% for post in blog.pages %}
-    {% if loop.index <= 5 %}
-    <li class="post-item">
-      <time datetime="{{ post.date | date(format='%Y-%m-%d') }}">{{ post.date | date(format="%b %-d, %Y") }}</time>
-      <a href="{{ post.permalink }}">{{ post.title }}</a>
-      {% if post.description %}<p class="post-blurb">{{ post.description }}</p>{% endif %}
-    </li>
-    {% endif %}
-    {% endfor %}
-  </ul>
-  <p><a class="more" href="{{ get_url(path='@/blog/_index.md') }}">All posts →</a></p>
-</section>
-{% endif %}
 {% endblock content %}
+
+{% block footer_class %} compact{% endblock footer_class %}
