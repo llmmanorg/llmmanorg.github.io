@@ -52,17 +52,17 @@ Notes:
 
 ## Editing the landing page
 
-Copy on the home page — the tagline, the subtitle, the hero command,
-the install commands and the "What else it does" points — lives in
-`[extra]` in `config.toml`, so it can be changed without touching
-templates. Layout lives in `templates/index.html`.
+The home page (`templates/index.html`) is a single-screen hero: logo,
+tagline, subtitle, hero command, install tabs and two buttons. All copy
+lives in `[extra]` in `config.toml`:
 
-The page is meant to answer "what is this?" in the first screen: one
-sentence, one command, what that command does. Everything below it is
-one plain paragraph and one command per point. No feature-card grid.
+- `tagline`, `subtitle`, `hero_cmd`
+- `repo_url`, `repo_name`, `models_url`
+- `[[extra.install]]`: `label` and `cmd` per install tab
 
-The demo GIF is served from the llmman repo's `docs-assets` release, the
-same one the README embeds, so the two stay in sync.
+The home page must fit with no scrollbars. `body.home` clips overflow
+only when the viewport is tall enough (`min-height: 35rem`, `50rem` on
+narrow phones); shorter windows scroll.
 
 The hero logo is `static/llmman-mark.png`: the manatee from the
 [org logo](https://github.com/llmmanorg), background removed so it sits
@@ -70,20 +70,24 @@ on the dark page. The wordmark underneath it was dropped, since it is
 dark teal (unreadable on this background) and redundant next to the
 site header.
 
+The header (`templates/base.html`) is the same on every page: logo and
+wordmark, then Models, Blog and a GitHub icon link.
+
 ## Layout
 
 ```
-config.toml              site config + landing-page copy
+config.toml              site config + all landing-page copy
 content/_index.md        home page (renders via templates/index.html)
 content/blog/            blog posts, one markdown file each
-templates/base.html      shared shell: head, header, footer
-templates/index.html     landing page
+templates/base.html      shared shell: head, header, footer, inline JS
+templates/index.html     home page: single-screen hero
+templates/pill.html      rounded command box with Copy button (included)
 templates/blog.html      blog index
 templates/post.html      single post
 templates/taxonomy_*.html  tag pages
 static/style.css         all styling
 static/llmman-mark.png   hero logo (manatee, transparent)
-static/favicon.png
+static/favicon.png       also the small mark in the header
 static/apple-touch-icon.png
 static/install.sh        served at /install.sh (curl | sh)
 static/install.ps1       served at /install.ps1 (irm | iex)
