@@ -44,8 +44,9 @@ function UseScoop {
     return !(Test-Path (Join-Path $env:LOCALAPPDATA "Microsoft\WindowsApps\llmman.exe"))
 }
 
-function ScoopListed {
-    (scoop list llmman *>&1 | Out-String) -match '(?m)^\s*llmman\s'
+function ScoopApp {
+    $Buckets = @(scoop bucket list | Where-Object { "$($_.Source)" -match 'github\.com/llmmanorg/scoop-bucket' } | ForEach-Object { $_.Name })
+    scoop list | Where-Object { $_.Name -eq "llmman" -and $Buckets -contains $_.Source } | Select-Object -First 1
 }
 
 function Main {
@@ -53,9 +54,12 @@ function Main {
     if (!$Repo) { $Repo = "llmmanorg/llmman" }
 
     if (UseScoop $Repo) {
-        if (ScoopListed) {
+        $App = ScoopApp
+        if ($App) {
+            $Scope = @()
+            if ("$($App.Info)" -match 'Global') { $Scope = @("--global") }
             $Before = scoop list llmman *>&1 | Out-String
-            scoop update llmman
+            scoop update llmman @Scope
             if ($LASTEXITCODE) { Die "scoop update failed" }
             # scoop update skips an app whose process is running
             if ($Before -eq (scoop list llmman *>&1 | Out-String)) {
@@ -64,8 +68,9 @@ function Main {
         } else {
             # an already-added bucket makes this fail harmlessly
             scoop bucket add llmman https://github.com/llmmanorg/scoop-bucket
-            scoop install llmman
+            scoop install llmman/llmman
             if ($LASTEXITCODE) { Die "scoop install failed" }
+            if (!(ScoopApp)) { Die "llmman/llmman is not installed; is another llmman installed?" }
         }
         "Installation completed successfully"
         return

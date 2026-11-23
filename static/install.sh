@@ -47,6 +47,10 @@ use_brew() {
 	[ ! -e "$HOME/.local/bin/llmman" ]
 }
 
+brew_has_llmman() {
+	brew list --full-name --formula 2>/dev/null | grep -qx llmmanorg/tap/llmman
+}
+
 check_path() {
 	case ":$1:" in
 	(*":$HOME/.local/bin:"*) return 0 ;;
@@ -105,10 +109,11 @@ main() {
 	[ "$HOME" ] || die "No HOME, please check your OS"
 
 	if use_brew; then
-		if brew list --formula llmman >/dev/null 2>&1; then
-			brew upgrade llmman || die "brew upgrade failed"
+		if brew_has_llmman; then
+			brew upgrade llmmanorg/tap/llmman || die "brew upgrade failed"
 		else
 			brew install llmmanorg/tap/llmman || die "brew install failed"
+			brew_has_llmman || die "llmmanorg/tap/llmman is not installed; is another llmman installed?"
 			printf "To keep the llmman daemon running across logins: brew services start llmman\n"
 		fi
 		printf "Installation completed successfully\n\n"
