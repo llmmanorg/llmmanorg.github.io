@@ -1,5 +1,6 @@
-# llmman installer (Windows) — downloads the llmman.exe binary matching
-# this host's CPU architecture from GitHub Releases and installs it to
+# llmman installer (Windows) — installs or upgrades llmman with Scoop when
+# scoop is present; otherwise downloads the llmman.exe binary matching this
+# host's CPU architecture from GitHub Releases to
 # %LOCALAPPDATA%\Microsoft\WindowsApps, which is already on PATH for every
 # user account by default on Windows 10/11. For Linux/macOS, use
 # install.sh instead.
@@ -35,9 +36,40 @@ function Die {
     exit 111
 }
 
+function UseScoop {
+    param([string]$Repo)
+    if (!(Get-Command scoop -ErrorAction SilentlyContinue)) { return $false }
+    if ($env:LLMMAN_VERSION -or $env:LLMMAN_BASE_URL -or $env:SKIP_INSTALL) { return $false }
+    if ($Repo -ne "llmmanorg/llmman") { return $false }
+    return !(Test-Path (Join-Path $env:LOCALAPPDATA "Microsoft\WindowsApps\llmman.exe"))
+}
+
+function ScoopListed {
+    (scoop list llmman *>&1 | Out-String) -match '(?m)^\s*llmman\s'
+}
+
 function Main {
     $Repo = $env:LLMMAN_REPO
     if (!$Repo) { $Repo = "llmmanorg/llmman" }
+
+    if (UseScoop $Repo) {
+        if (ScoopListed) {
+            $Before = scoop list llmman *>&1 | Out-String
+            scoop update llmman
+            if ($LASTEXITCODE) { Die "scoop update failed" }
+            # scoop update skips an app whose process is running
+            if ($Before -eq (scoop list llmman *>&1 | Out-String)) {
+                "llmman is unchanged; if it is running, stop it and run: scoop update llmman"
+            }
+        } else {
+            # an already-added bucket makes this fail harmlessly
+            scoop bucket add llmman https://github.com/llmmanorg/scoop-bucket
+            scoop install llmman
+            if ($LASTEXITCODE) { Die "scoop install failed" }
+        }
+        "Installation completed successfully"
+        return
+    }
 
     switch ($env:PROCESSOR_ARCHITECTURE) {
         "ARM64" { $Target = "aarch64-pc-windows-msvc" }
