@@ -63,7 +63,7 @@ function Main {
             if ($LASTEXITCODE) { Die "scoop update failed" }
             # scoop update skips an app whose process is running
             if ($Before -eq (scoop list llmman *>&1 | Out-String)) {
-                "llmman is unchanged; if it is running, stop it and run: scoop update llmman"
+                "llmman is unchanged; if it is running, stop it and run: scoop update llmman $Scope"
             }
         } else {
             # an already-added bucket makes this fail harmlessly
