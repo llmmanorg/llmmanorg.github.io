@@ -58,6 +58,9 @@ function Main {
         if ($App) {
             $Scope = @()
             if ("$($App.Info)" -match 'Global') { $Scope = @("--global") }
+            # refresh buckets: scoop update <app> skips that within 3 hours of the last sync
+            scoop update
+            if ($LASTEXITCODE) { Die "scoop update failed" }
             $Before = scoop list llmman *>&1 | Out-String
             scoop update llmman @Scope
             if ($LASTEXITCODE) { Die "scoop update failed" }
