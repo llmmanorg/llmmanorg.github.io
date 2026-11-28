@@ -1,5 +1,6 @@
-# llmman installer (Windows) — downloads the llmman.exe binary matching
-# this host's CPU architecture from GitHub Releases and installs it to
+# llmman installer (Windows), installs or upgrades llmman with Scoop when
+# scoop is present; otherwise downloads the llmman.exe binary matching this
+# host's CPU architecture from GitHub Releases to
 # %LOCALAPPDATA%\Microsoft\WindowsApps, which is already on PATH for every
 # user account by default on Windows 10/11. For Linux/macOS, use
 # install.sh instead.
@@ -35,9 +36,48 @@ function Die {
     exit 111
 }
 
+function UseScoop {
+    param([string]$Repo)
+    if (!(Get-Command scoop -ErrorAction SilentlyContinue)) { return $false }
+    if ($env:LLMMAN_VERSION -or $env:LLMMAN_BASE_URL -or $env:SKIP_INSTALL) { return $false }
+    if ($Repo -ne "llmmanorg/llmman") { return $false }
+    return !(Test-Path (Join-Path $env:LOCALAPPDATA "Microsoft\WindowsApps\llmman.exe"))
+}
+
+function ScoopApp {
+    $Buckets = @(scoop bucket list | Where-Object { "$($_.Source)" -match 'github\.com/llmmanorg/scoop-bucket' } | ForEach-Object { $_.Name })
+    scoop list | Where-Object { $_.Name -eq "llmman" -and $Buckets -contains $_.Source } | Select-Object -First 1
+}
+
 function Main {
     $Repo = $env:LLMMAN_REPO
     if (!$Repo) { $Repo = "llmmanorg/llmman" }
+
+    if (UseScoop $Repo) {
+        $App = ScoopApp
+        if ($App) {
+            $Scope = @()
+            if ("$($App.Info)" -match 'Global') { $Scope = @("--global") }
+            # refresh buckets: scoop update <app> skips that within 3 hours of the last sync
+            scoop update
+            if ($LASTEXITCODE) { Die "scoop update failed" }
+            $Before = scoop list llmman *>&1 | Out-String
+            scoop update llmman @Scope
+            if ($LASTEXITCODE) { Die "scoop update failed" }
+            # scoop update skips an app whose process is running
+            if ($Before -eq (scoop list llmman *>&1 | Out-String)) {
+                "llmman is unchanged; if it is running, stop it and run: scoop update llmman $Scope"
+            }
+        } else {
+            # an already-added bucket makes this fail harmlessly
+            scoop bucket add llmman https://github.com/llmmanorg/scoop-bucket
+            scoop install llmman/llmman
+            if ($LASTEXITCODE) { Die "scoop install failed" }
+            if (!(ScoopApp)) { Die "llmman/llmman is not installed; is another llmman installed?" }
+        }
+        "Installation completed successfully"
+        return
+    }
 
     switch ($env:PROCESSOR_ARCHITECTURE) {
         "ARM64" { $Target = "aarch64-pc-windows-msvc" }

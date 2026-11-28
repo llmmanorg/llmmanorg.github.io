@@ -1,7 +1,7 @@
 #!/bin/sh
-# llmman installer (Linux, macOS) — downloads the llmman binary matching
-# this host's OS/arch from GitHub Releases and installs it to
-# ~/.local/bin. For Windows, use install.ps1 instead.
+# llmman installer (Linux, macOS), installs or upgrades llmman with Homebrew
+# when brew is present; otherwise downloads the binary matching this host's
+# OS/arch from GitHub Releases to ~/.local/bin. For Windows, use install.ps1.
 #
 #   curl -fsSL https://raw.githubusercontent.com/llmmanorg/llmman/main/install.sh | sh
 #
@@ -41,9 +41,14 @@ check_bin() {
 }
 
 use_brew() {
+	check_bin brew || return 1
 	[ -z "$LLMMAN_VERSION$LLMMAN_BASE_URL$SKIP_INSTALL" ] || return 1
 	[ "$LLMMAN_REPO" = llmmanorg/llmman ] || return 1
 	[ ! -e "$HOME/.local/bin/llmman" ]
+}
+
+brew_has_llmman() {
+	brew list --full-name --formula 2>/dev/null | grep -qx llmmanorg/tap/llmman
 }
 
 check_path() {
@@ -104,8 +109,13 @@ main() {
 	[ "$HOME" ] || die "No HOME, please check your OS"
 
 	if use_brew; then
-		brew install llmmanorg/tap/llmman || die "brew install failed"
-		printf "To keep the llmman daemon running across logins: brew services start llmman\n"
+		if brew_has_llmman; then
+			brew upgrade llmmanorg/tap/llmman || die "brew upgrade failed"
+		else
+			brew install llmmanorg/tap/llmman || die "brew install failed"
+			brew_has_llmman || die "llmmanorg/tap/llmman is not installed; is another llmman installed?"
+			printf "To keep the llmman daemon running across logins: brew services start llmman\n"
+		fi
 		printf "Installation completed successfully\n\n"
 		return
 	fi
