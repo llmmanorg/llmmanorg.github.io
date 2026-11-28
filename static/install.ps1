@@ -1,4 +1,4 @@
-# llmman installer (Windows) — installs or upgrades llmman with Scoop when
+# llmman installer (Windows), installs or upgrades llmman with Scoop when
 # scoop is present; otherwise downloads the llmman.exe binary matching this
 # host's CPU architecture from GitHub Releases to
 # %LOCALAPPDATA%\Microsoft\WindowsApps, which is already on PATH for every

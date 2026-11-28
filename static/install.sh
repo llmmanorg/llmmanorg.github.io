@@ -1,5 +1,5 @@
 #!/bin/sh
-# llmman installer (Linux, macOS) — installs or upgrades llmman with Homebrew
+# llmman installer (Linux, macOS), installs or upgrades llmman with Homebrew
 # when brew is present; otherwise downloads the binary matching this host's
 # OS/arch from GitHub Releases to ~/.local/bin. For Windows, use install.ps1.
 #
